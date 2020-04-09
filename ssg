@@ -1,0 +1,26 @@
+#!/bin/bash
+set -eu
+
+BLOG_TITLE="$1"
+COPYRIGHT_YEAR="$2"
+COPYRIGHT_HOLDER="$3"
+
+ROOT="$(cd $(dirname $0); pwd)"
+SITE_ROOT=/"$(basename $(pwd))"
+WORKDIR="$(mktemp -d)"
+trap "rm -rf \"$WORKDIR\"" EXIT
+
+cp -a "$ROOT"/src/* "$WORKDIR"
+if [ -e out ]; then
+  cp -a out "$WORKDIR"
+fi
+cp -a entries "$WORKDIR"/src/entries
+
+make -C "$WORKDIR" \
+  SITE_ROOT="$SITE_ROOT" \
+  BLOG_TITLE="$BLOG_TITLE" \
+  COPYRIGHT_YEAR="$COPYRIGHT_YEAR" \
+  COPYRIGHT_HOLDER="$COPYRIGHT_HOLDER"
+
+rm -rf out
+cp -a "$WORKDIR"/out .
