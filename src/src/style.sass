@@ -1,5 +1,6 @@
 \:root
     --background-color: #fefeff
+    --background-color-dark: #f1f1f2
     --color: #38383d
     --color-light: #878793
     --color-extra-light: #dfdff2
@@ -14,25 +15,31 @@
     top: $value
     bottom: $value
 
+$center-max-width: 50rem
+$center-horizontal-padding: 1rem
+
 @mixin box
+    $padding: 1em
+    background-color: var(--background-color-dark)
     overflow:
         x: auto
         y: hidden
     padding:
-        @include left-and-right(1em)
-    border:
-        color: var(--color)
-        style: solid
-        width: 2px
+        @include left-and-right($padding)
     margin:
         @include top-and-bottom(1.25em)
+    @media (max-width: $center-max-width)
+        padding:
+            @include left-and-right(calc(#{$padding} + #{$center-horizontal-padding / 2}))
+        margin:
+            @include left-and-right(-$center-horizontal-padding)
 
 @mixin center
     // avoid overflow
     width: 100%
-    max-width: 50rem
+    max-width: $center-max-width
     padding:
-        @include left-and-right(1rem)
+        @include left-and-right($center-horizontal-padding)
     margin:
         @include left-and-right(auto)
 
@@ -43,6 +50,8 @@ body
         family: sans-serif
         feature-settings: "kern"
     line-height: 1.75em
+    @media (max-width: $center-max-width)
+        font-size: 95%
 
 h1
     font:
